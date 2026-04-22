@@ -216,7 +216,8 @@ export function create_detail(movie, trial) {
     let buy = document.createElement("button");
     buy.className = "round btn padding1 nomargin color-primary color-reverse span-width center";
     buy.innerHTML = "<strong> BUY </strong>";
-    buy.addEventListener("click", () => {
+    buy.addEventListener("click", (e) => {
+        e.preventDefault();
         const userData = {
             movie: movie, // this should be the entire "movie" object, as described in lines 17-24 above
             movieTime: select_time.value, // a string
