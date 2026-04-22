@@ -1,0 +1,52 @@
+/* Defining color themes */
+.color-primary{
+    background-color: var(--primary-color);
+    color: var(--text-color);
+}
+
+.color-secondary{
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+.color-alert{
+    background-color: var(--alert-color);
+    color: var(--text-color);
+}
+
+.color-highlight{
+    background-color: var(--highlight-color);
+    color: var(--text-reversed-color);
+}
+
+.color-regular{
+    color: var(--text-color);
+}
+
+.color-reverse{
+    color: var(--text-reversed-color);
+}
+
+.g1{
+    background-color: var(--g1);
+}
+.g2{
+    background-color: var(--g2);
+}
+.g3{
+    background-color: var(--g3);
+}
+.g4{
+    background-color: var(--g4);
+}
+.g5{
+    background-color: var(--g5);
+}
+
+.g1 h2{
+    color: var(--primary-color);
+}
+
+.g1 h3{
+    color: var(--primary-color);
+}

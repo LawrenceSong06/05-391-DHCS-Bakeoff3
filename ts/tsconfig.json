@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "outDir": "../js",
-    "module": "none",
+    "module": "esnext",
     "target": "es2018",
     "allowJs": true,
     "lib": ["es6", "dom"]
   },
+  "include": ["**/*.ts"],
   "exclude": [
     "node_modules",
   ]

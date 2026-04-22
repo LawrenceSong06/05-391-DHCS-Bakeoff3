@@ -1,4 +1,5 @@
 /// <reference path="framework.ts" />
+import Movies from "./data/model.js";
 
 //  ============= CHANGED (start) ==============
 // You can define some test movies (here, or in a .js file loaded before this one in the html) and pass them into the Trial engine to test different movie datasets.
@@ -62,72 +63,25 @@ window.addEventListener("load", async (e: Event) => {
 	// -----> **must** be awaited <------
 	const movies : Array<movieData> = await trial.getMovies(); // 👈 note the word "await" in this line ✅
 
+	// Create the movie data model that can be used in the future to
+	// query over all movies and apply filters and orders.
+	//
+	// The model is just a wrapper for a "database" of movies.
+	let movie_model : Movies = new Movies();
+	// Insert all movies into the model.
+	movie_model.insert_all(movies);
+
+
 	// Variable to store the current movie selection.
 	let currentlySelectedMovie : movieData;
 
-	// for every movie in the list, add it to the movie selector dropdown
-	for (let i = 0; i<movies.length; i++) {
-		const movie : movieData = movies[i];
-		const opt : HTMLOptionElement = document.createElement("option");
-		opt.innerText = movie.title; // for a dropdown menu, the "innerText" will be what is displayed to the user...
-		opt.value = i+""; // ...and the "value" is another bit of data we can associate with it. In this case, we'll store the index of the movie in the movie list, so we can use it to retrieve the movie data later.
-		titleSelect.appendChild(opt);
-	}
-
-	// ...and then update the rest of the display with the info about the first movie on the list, which will be the default option selected.
-	selectMovie(movies[0]);
-
-	// Whenever a new item is chosen from the list, update the view
-	titleSelect.addEventListener("change", (event : Event)  => {
-		selectMovie(movies[titleSelect.value]);
-	});
-
-	function selectMovie(movie: movieData) {
-		// set the currentlySelectedMovie to this one
-		currentlySelectedMovie = movie;
-
-		// update the display
-		displayMovieDetails(movie);
-		displayShowtimes(movie);
-	}
-
-	// Function to generate HTML elements containing title, details, etc for the movie to be displayed
-	function displayMovieDetails(movie : movieData) {
-		// clear anything that's currently in there out
-		movieInfoDiv.innerHTML = ''; 
-
-		// ...then make new elements
-		const titleBar = document.createElement("H2");
-		titleBar.innerText = movie.title;
-		const details = document.createElement("div");
-
-		const description = document.createElement("p");
-		description.innerText = movie.description;
-		details.appendChild(description);
-
-		const tags = document.createElement("p");
-		tags.innerText = "Tags: "+movie.genres.join(", ");
-		details.appendChild(tags);
-
-		const actors = document.createElement("p");
-		actors.innerText = "Starring: "+movie.actors.join(", ");
-		details.appendChild(actors);
-
-		movieInfoDiv.appendChild(titleBar);
-		movieInfoDiv.appendChild(details);
-	}
-
-	// Function that puts the showtimes of the given movie into the showtime dropdown list.
-	function displayShowtimes(movie : movieData) {
-		timeSelect.innerHTML = '';
-		for (let i = 0; i<movie.movieTimes.length; i++) {
-			const t = movie.movieTimes[i];
-			const opt = document.createElement("option");
-			opt.innerText = t;
-			opt.value = t;
-			timeSelect.appendChild(opt);
-		}
-	}
+	
+	Array.from(document.querySelectorAll(".toggle-dropdown")).forEach((element : HTMLButtonElement)=>{
+		console.log(element);
+		element.addEventListener("click", (event) => {
+			element.parentElement.closest(".dropdown").classList.toggle("active");
+		});
+	})
 
 	// When the user clicks the submit button, 
 	submitButton.addEventListener("click", (event) => {

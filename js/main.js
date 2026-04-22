@@ -1,3 +1,5 @@
+/// <reference path="framework.ts" />
+import Movies from "./data/model.js";
 //  ============= CHANGED (start) ==============
 // You can define some test movies (here, or in a .js file loaded before this one in the html) and pass them into the Trial engine to test different movie datasets.
 const testMovies = [
@@ -26,8 +28,6 @@ const testMovies = [
     }
 ];
 //  ============= CHANGED (end) ==============
-
-
 // As always, we add our parts within a "load" event to make sure the HTML stuff has loaded first. 
 window.addEventListener("load", async (e) => {
     // Get references to the HTML elements that we need.
@@ -37,15 +37,12 @@ window.addEventListener("load", async (e) => {
     const numberOfTicketsTextBox = document.getElementById("numberOfTickets");
     const userNameTextBox = document.getElementById("userName");
     const movieInfoDiv = document.getElementById("movieInfo");
-
-
     //  ============= CHANGED (start) ==============
     // When you make the new "Trial", you can pass it in a test movie set (that you have written) during testing, like this:
     // const trial = new Trial("teamName", testMovies, false);
     // For the actual bakeoff, you should *not* pass in the test set, so it will retrieve "real" ones from the server. You can also turn off the "debug" boolean. So here is the version of the above line that should be used during the real Bakeoff (but with your actual teamName of course):
     const trial = new Trial("teamName");
     //  ============= CHANGED (end) ==============
-
     // getMovies is a function defined by the framework script. 
     // It will return a list of movies (in no guaranteed order). Each movie will be an object shaped like this:
     // {
@@ -56,70 +53,24 @@ window.addEventListener("load", async (e) => {
     //  	description: string,
     //  	actors: list of strings
     // 	}
-
-
     // CHANGED: It is an async function (because it will poll a server) so it 
     // -----> **must** be awaited <------
     const movies = await trial.getMovies(); // 👈 note the word "await" in this line ✅
-
+    // Create the movie data model that can be used in the future to
+    // query over all movies and apply filters and orders.
+    //
+    // The model is just a wrapper for a "database" of movies.
+    let movie_model = new Movies();
+    // Insert all movies into the model.
+    movie_model.insert_all(movies);
     // Variable to store the current movie selection.
     let currentlySelectedMovie;
-    // for every movie in the list, add it to the movie selector dropdown
-    for (let i = 0; i < movies.length; i++) {
-        const movie = movies[i];
-        const opt = document.createElement("option");
-        opt.innerText = movie.title; // for a dropdown menu, the "innerText" will be what is displayed to the user...
-        opt.value = i + ""; // ...and the "value" is another bit of data we can associate with it. In this case, we'll store the index of the movie in the movie list, so we can use it to retrieve the movie data later.
-        titleSelect.appendChild(opt);
-    }
-    // ...and then update the rest of the display with the info about the first movie on the list, which will be the default option selected.
-    selectMovie(movies[0]);
-
-    // Whenever a new item is chosen from the list, update the view
-    titleSelect.addEventListener("change", (event) => {
-        selectMovie(movies[titleSelect.value]);
+    Array.from(document.querySelectorAll(".toggle-dropdown")).forEach((element) => {
+        console.log(element);
+        element.addEventListener("click", (event) => {
+            element.parentElement.closest(".dropdown").classList.toggle("active");
+        });
     });
-    function selectMovie(movie) {
-        // set the currentlySelectedMovie to this one
-        currentlySelectedMovie = movie;
-        // update the display
-        displayMovieDetails(movie);
-        displayShowtimes(movie);
-    }
-
-    // Function to generate HTML elements containing title, details, etc for the movie to be displayed
-    function displayMovieDetails(movie) {
-        // clear anything that's currently in there out
-        movieInfoDiv.innerHTML = '';
-        // ...then make new elements
-        const titleBar = document.createElement("H2");
-        titleBar.innerText = movie.title;
-        const details = document.createElement("div");
-        const description = document.createElement("p");
-        description.innerText = movie.description;
-        details.appendChild(description);
-        const tags = document.createElement("p");
-        tags.innerText = "Tags: " + movie.genres.join(", ");
-        details.appendChild(tags);
-        const actors = document.createElement("p");
-        actors.innerText = "Starring: " + movie.actors.join(", ");
-        details.appendChild(actors);
-        movieInfoDiv.appendChild(titleBar);
-        movieInfoDiv.appendChild(details);
-    }
-
-    // Function that puts the showtimes of the given movie into the showtime dropdown list.
-    function displayShowtimes(movie) {
-        timeSelect.innerHTML = '';
-        for (let i = 0; i < movie.movieTimes.length; i++) {
-            const t = movie.movieTimes[i];
-            const opt = document.createElement("option");
-            opt.innerText = t;
-            opt.value = t;
-            timeSelect.appendChild(opt);
-        }
-    }
-    
     // When the user clicks the submit button, 
     submitButton.addEventListener("click", (event) => {
         // bundle up everything the Judge wants to see: the movie [a full movie object with all the metadata], the movieTime, the numberOfTickets (*as a number*), and the userName

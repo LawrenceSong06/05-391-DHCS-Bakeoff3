@@ -1,0 +1,104 @@
+*{
+    box-sizing: border-box;
+}
+
+.nomargin{
+    margin: 0;
+}
+
+/* CSS for all flex settings */
+.flex{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flex-row{
+    flex-direction: row;
+}
+
+.flex-column{
+    flex-direction: column;
+}
+
+.flex-row.flex-reverse{
+    flex-direction: row-reverse;
+}
+
+.flex-column.flex-reverse{
+    flex-direction: column-reverse;
+}
+
+.flex-nowrap{
+    flex-wrap: nowrap;
+}
+
+/* Justify Content */
+.flex-justify-start{
+    justify-content: flex-start;
+}
+
+.flex-justify-center{
+    justify-content: center;
+}
+
+.flex-justify-around{
+    justify-content: space-around;
+}
+
+.flex-justify-between{
+    justify-content: space-between;
+}
+
+.flex-justify-evenly{
+    justify-content: space-evenly;
+}
+
+.flex-justify-end{
+    justify-content: flex-end;
+}
+
+/* Align Items */
+.flex-align-start{
+    align-items: flex-start;
+}
+
+.flex-align-center{
+    align-items: center;
+}
+
+.flex-align-around{
+    align-items: space-around;
+}
+
+.flex-align-between{
+    align-items: space-between;
+}
+
+.flex-align-evenly{
+    align-items: space-evenly;
+}
+
+.flex-align-end{
+    align-items: flex-end;
+}
+
+.flex-placeholder{
+    flex: 99999;
+}
+
+/* Gaps */
+.gap-_25{
+    gap: .25em;
+}
+
+.gap-_5{
+    gap: .5em;
+}
+
+.gap-1{
+    gap: 1em;
+}
+
+.gap-2{
+    gap: 2em;
+}

@@ -3,31 +3,69 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Bakeoff 3</title>
+		<link rel="stylesheet" type="text/css" href="CSS/variables.css">
+		<link rel="stylesheet" type="text/css" href="CSS/icons.css">
+		<link rel="stylesheet" type="text/css" href="CSS/theme.css">
+		<link rel="stylesheet" type="text/css" href="CSS/layout.css">
+		<link rel="stylesheet" type="text/css" href="CSS/components.css">
+		<link rel="stylesheet" type="text/css" href="CSS/base.css">
 		<link rel="stylesheet" type="text/css" href="CSS/main.css">
 	</head>
 	<body>
-		<!-- You *may* edit the HTML this time. -->
 		<div id="main">
-			<div id="movieInfo"></div>
-			<form>
-				<label for="titleSelect">Select a movie...</label>
-				<select id="titleSelect"></select>
-				<label for="timeSelect">Select a showtime...</label>
-				<select id="timeSelect"></select>
-				<hr>
-				<label for="numberOfTickets">How many tickets?</label>
-				<input type="range" id="numberOfTickets" min="1" max="200" value="1" step="1" oninput="this.nextElementSibling.value = this.value"/>
-				<output>1</output>
+			<div class="card1 sidebar color-secondary flex flex-column flex-justify-start flex-align-start g1">
+				<div class="flex flex-column flex-align-center span-width padding2">
+					<h2 class="iconfont padding1">&#xe665;</h2>
+					<h2 class="nopadding">FILTER&SORT</h2>
+				</div>
+				<hr/>
+				
+				<div class="span-width">
 
-				<label for="userName">Your name:</label>
-				<input type="text" id="userName"/>
+					<div id="filters" class="flex flex-column dropdown span-width">
+						<div class="flex flex-row flex-nowrap btn noborder toggle-dropdown span-width">
+							<h3 class = "card3 nomargin">&nbsp;Filters</h3>
+						</div>
+	
+						<div class="flex flex-column flex-align-start card3 round dropdown-content">
+							
+						</div>
+					</div>
+					
+					<hr/>
+	
+					<div id="sort" class="flex flex-column dropdown span-width">
+						<div class="flex flex-row flex-nowrap btn noborder toggle-dropdown span-width">
+							<h3 class = "card3 nomargin">&nbsp;Sort</h3>
+						</div>
+	
+						<div class="flex flex-column flex-align-start card3 round dropdown-content">
+							
+						</div>
+					</div>
 
-				<input type="button" id="submit" value="Send" />
-			</form>
+				</div>
+
+				<div class="flex-placeholder"></div>
+
+				<div class="round btn padding1 nomargin color-primary color-reverse span-width" id="apply-options">
+					<strong>APPLY</strong>
+				</div>
+			</div>
+
+
+			<div class="card1 index color-regular">
+
+			</div>
+
+
+			<div class="card1 detail color-secondary g1">
+				
+			</div>
 		</div>
 	</body>
 	<!-- Must include the framework load: -->
 	<script src="./js/framework.js"></script>
 	<!-- Your js code should be loaded from local file: -->
-	<script src="./js/main.js"></script>
+	<script type="module" src="./js/main.js"></script>
 </html>
