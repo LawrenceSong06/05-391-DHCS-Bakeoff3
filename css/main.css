@@ -1,0 +1,19 @@
+/* Example CSS. You may re-write any of this. */
+body {
+	height: 100vh;
+	width: 100vw;
+	border: none;
+	margin: 0px;
+	text-align: center;
+	display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#preview {
+	outline: 1px solid #777;
+	padding: 2em;
+	max-width: 50vw;
+}
+form {
+	padding: 2em;
+}
