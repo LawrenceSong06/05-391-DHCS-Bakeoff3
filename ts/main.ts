@@ -1,5 +1,7 @@
 /// <reference path="framework.ts" />
 import Movies from "./data/model.js";
+import * as Templete from "./templetes.js"
+import * as Helpers from "./helpers.js"
 
 //  ============= CHANGED (start) ==============
 // You can define some test movies (here, or in a .js file loaded before this one in the html) and pass them into the Trial engine to test different movie datasets.
@@ -66,35 +68,131 @@ window.addEventListener("load", async (e: Event) => {
 	// Create the movie data model that can be used in the future to
 	// query over all movies and apply filters and orders.
 	//
-	// The model is just a wrapper for a "database" of movies.
-	let movie_model : Movies = new Movies();
-	// Insert all movies into the model.
-	movie_model.insert_all(movies);
+	// The Movie model is just a wrapper for a "database" of movies that gives us some convinient functions.
+	let Movie : Movies = new Movies(movies);
 
+	// Getting all genres and actors
+	// This will later be used to add UI for the filters and orders
+	let genres : Array<string> = Movie.genres;
+	let actors : Array<string> = Movie.actors;
 
+	// Some key components of the page:
+	let filter_sort_form : HTMLFormElement = document.getElementById("filter-sort") as HTMLFormElement;
+	let movie_index : HTMLDivElement = document.getElementById("movie_index") as HTMLDivElement;
+	let movie_detail : HTMLDivElement = document.getElementById("movie_detail") as HTMLDivElement;
+
+	// Generating filters for each genre, and put them into the genre filter form
+	// so that the user can access them through the UI
+	let genre_form = document.getElementById("genre-form");
+	genres.forEach(g => {
+		genre_form.appendChild(Templete.create_genre_filter(g));
+	});
+	
+	// ========= Actor Searching ==========	
+	let selected_actors : HTMLDivElement = document.getElementById("selected_actors") as HTMLDivElement;
+	let search_actor_input : HTMLInputElement = document.getElementById("search_actor") as HTMLInputElement;
+	let actor_prompts : HTMLDivElement = document.getElementById("actor_prompts") as HTMLDivElement;
+	search_actor_input.addEventListener("input", (e)=>{
+		let target = search_actor_input.value;
+
+		// Return the 5 actors that is searched by the user most possibly
+		let search_actors = actors.map((a)=>{
+			return [Helpers.string_difference(target, a), a];
+		});
+		
+		search_actors.sort((a, b)=>{
+			return a[0] - b[0];
+		});
+		
+		let res = search_actors.slice(0, 5).map((a)=>{return a[1]});
+		
+		actor_prompts.replaceChildren();
+		res.forEach(a => {
+			let select_a = Templete.create_actor_select(a);
+			select_a.addEventListener("click", ()=>{
+				let data = new FormData(filter_sort_form);
+				if(data.getAll("includes-actors").indexOf(a) != -1){
+					return;
+				}
+				selected_actors.appendChild(Templete.create_selected_actor(a));
+			});
+
+			actor_prompts.appendChild(select_a);
+		});
+	});
+
+	function insert_index_card(movie){
+		let index_card = Templete.create_index_card(movie);
+		movie_index.appendChild(index_card);
+
+		index_card.addEventListener("click", ()=>{
+			movie_detail.replaceChildren(Templete.create_detail(movie, trial));
+		});
+	}
+
+	// ============= Application of Filter&Sort ==============
+	let apply_filter_and_sort = document.getElementById("filter-sort-apply");
+	apply_filter_and_sort.addEventListener("click", ()=>{
+		// Fetching data from the form
+		let data = new FormData(filter_sort_form);
+		
+		let genres = data.getAll("includes-genres");
+		let actors = data.getAll("includes-actors");
+
+		let start_time_after = data.get("start-time-after");
+		let start_time_before = data.get("start-time-before");
+
+		let end_time_after = data.get("end-time-after");
+		let end_time_before = data.get("end-time-before");
+
+		let min_length = data.get("min-length");
+		let max_length = data.get("max-length");
+
+		let sort : string = data.get("sort") as string;
+
+		// Querying Movies
+		const res = Movie.select_all()
+		.filter_by("genres", {include: genres})
+		.filter_by("actors", {include: actors})
+		.filter_by("time", {
+			starts: {after: start_time_after, before: start_time_before},
+			ends: {after: end_time_after, before: end_time_before}
+		})
+		.filter_by("length", {from: min_length, to: max_length})
+		.sort_by(sort, {actors: actors, genres: genres})
+		.result;
+
+		movie_index.replaceChildren();
+		if(res.length == 0){
+			let notice = document.createElement("h4");
+			notice.classList.add("span-width");
+			notice.classList.add("center");
+			notice.innerText = "No matching result. Maybe try some other filters?";
+			movie_index.appendChild(notice);
+
+			return;
+		}
+
+		// Updating index
+		res.forEach(movie => {
+			insert_index_card(movie);
+		});
+
+		movie_index.scrollTo({top: 0, behavior: "smooth"});
+	});
+
+	// We first insert something into movie index, so that is is not empty at the beginning
+	Movie.select_all().sort_by("alphabetical").result.forEach((movie)=>{
+		insert_index_card(movie);
+	})
 	// Variable to store the current movie selection.
 	let currentlySelectedMovie : movieData;
 
 	
+	// Adding click events for the dropdown toggles. They should be able to toggle relevent dropdown.
 	Array.from(document.querySelectorAll(".toggle-dropdown")).forEach((element : HTMLButtonElement)=>{
-		console.log(element);
 		element.addEventListener("click", (event) => {
 			element.parentElement.closest(".dropdown").classList.toggle("active");
 		});
 	})
-
-	// When the user clicks the submit button, 
-	submitButton.addEventListener("click", (event) => {
-		// bundle up everything the Judge wants to see: the movie [a full movie object with all the metadata], the movieTime, the numberOfTickets (*as a number*), and the userName
-		const userData : userData = {
-			movie: currentlySelectedMovie, // this should be the entire "movie" object, as described in lines 17-24 above
-			movieTime: timeSelect.value,  // a string
-			numberOfTickets: parseInt(numberOfTicketsTextBox.value), // a number
-			userName: userNameTextBox.value // a string
-		};
-		// ...and submit it to the Judge. 
-		// ===> Your code *must*, somewhere/somehow, call this: <===
-		trial.submitMovieChoice(userData);
-	});	
-
 });

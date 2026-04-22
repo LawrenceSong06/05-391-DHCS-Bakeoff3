@@ -16,6 +16,7 @@ export class Query<T>{
 
     public from(table_name : string){
         this.from_table = table_name;
+        return this;
     }
 
     /**
@@ -115,7 +116,6 @@ export class DB<T>{
 
     /**
      * @description Querying the database
-     * @param table the table to be queried
      * @returns a query object
      * 
      * @example
@@ -123,9 +123,9 @@ export class DB<T>{
      * // This returns all records in table1
      * // Notice that the ".result" must be included to execute the query. 
      * // Otherwise, it will remain as the query object.
-     * db.select_from("table1").result
+     * db.select_all().from("table1").result
      */
-    public query(table : string){
+    public select_all(){
         return new Query(this);
     }
 }

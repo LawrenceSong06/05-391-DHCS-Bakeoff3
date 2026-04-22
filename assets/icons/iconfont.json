@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "45428356",
+      "name": "查看详情",
+      "font_class": "chakanxiangqing",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "10621533",
+      "name": "movies",
+      "font_class": "movies",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "141768",
+      "name": "local-movies",
+      "font_class": "localmovies",
+      "unicode": "e7a4",
+      "unicode_decimal": 59300
+    },
+    {
+      "icon_id": "3410052",
+      "name": "向前",
+      "font_class": "xianghou1",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "372811",
+      "name": "cc-dot-o",
+      "font_class": "cc-dot-o",
+      "unicode": "e6c0",
+      "unicode_decimal": 59072
+    },
+    {
+      "icon_id": "380331",
+      "name": "dot",
+      "font_class": "dot",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
       "icon_id": "6192599",
       "name": "控制",
       "font_class": "kongzhi",

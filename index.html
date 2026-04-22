@@ -13,22 +13,128 @@
 	</head>
 	<body>
 		<div id="main">
-			<div class="card1 sidebar color-secondary flex flex-column flex-justify-start flex-align-start g1">
+			<div id="sidebar" class="card1 color-secondary flex flex-column flex-justify-start flex-align-start g1">
 				<div class="flex flex-column flex-align-center span-width padding2">
 					<h2 class="iconfont padding1">&#xe665;</h2>
 					<h2 class="nopadding">FILTER&SORT</h2>
 				</div>
 				<hr/>
 				
-				<div class="span-width">
+				<form id="filter-sort" class="span-width overflow-y-scroll overflow-x-hidden flex-fill scrollbar">
 
 					<div id="filters" class="flex flex-column dropdown span-width">
 						<div class="flex flex-row flex-nowrap btn noborder toggle-dropdown span-width">
-							<h3 class = "card3 nomargin">&nbsp;Filters</h3>
+							<h3 class = "card3 nomargin">Filters</h3>
 						</div>
 	
-						<div class="flex flex-column flex-align-start card3 round dropdown-content">
-							
+						<div class="flex flex-column flex-align-start card3 round dropdown-content padding_5">
+							<div class="dropdown span-width">
+								<h4 class="padding_5 btn noborder span-width flex flex-row toggle-dropdown">
+									Genre
+								</h4>
+
+								<div class="dropdown-content padding_5" id="genre-form">
+
+								</div>
+							</div>
+
+						</div>
+
+						<hr/>
+
+						<div class="flex flex-column flex-align-start card3 round dropdown-content padding_5">
+							<div class="dropdown span-width">
+								<h4 class="padding_5 btn noborder span-width flex flex-row toggle-dropdown">
+									Actor
+								</h4>
+
+								<div class="dropdown-content padding_5" id="actor-form">
+									<div id="selected_actors" class="flex flex-row">
+
+									</div>
+
+									<label>
+										<strong>
+											Search for an actor:
+										</strong>
+									</label>
+									<input id="search_actor" type="text" class="btn noborder bottom-border nobackground padding_5">
+									<div id="actor_prompts">
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<hr/>
+
+						<div class="flex flex-column flex-align-start card3 round dropdown-content padding_5">
+							<div class="dropdown span-width">
+								<h4 class="padding_5 btn noborder span-width flex flex-row toggle-dropdown">
+									Time
+								</h4>
+
+								<div class="dropdown-content padding_5" id="time-form">
+									<label>
+										<strong>Start time</strong>
+									</label>
+									<br/>
+
+									<div class="flex flex-row flex-align-center">
+										<div class="flex flex-column">
+											<label for="start-time-after">After:</label>
+											<input type="time" name="start-time-after">
+										</div>
+										
+										<p class="iconfont padding_5">&#xe600;</p>
+
+										<div class="flex flex-column">
+											<label for="start-time-before">Before:</label>
+											<input type="time" name="start-time-before">
+										</div>
+									</div>
+
+									<br/>
+
+									<label>
+										<strong>End time</strong>
+									</label>
+
+									<div class="flex flex-row flex-align-center">
+										<div class="flex flex-column">
+											<label for="end-time-after">After:</label>
+											<input type="time" name="end-time-after">
+										</div>
+										
+										<p class="iconfont padding_5">&#xe600;</p>
+
+										<div class="flex flex-column">
+											<label for="end-time-before">Before:</label>
+											<input type="time" name="end-time-before">
+										</div>
+									</div>
+
+									<br/>
+
+									<label>
+										<strong>Length</strong>
+									</label>
+
+									<div class="flex flex-row flex-align-center">
+										<div class="flex flex-column">
+											<label for="min-length">Min Length (min):</label>
+											<input type="number" name="min-length">
+										</div>
+										<div class="flex flex-column">
+											<label for="max-length">Max Length (min):</label>
+											<input type="number" name="max-length">
+										</div>
+									</div>
+
+								</div>
+							</div>
+
 						</div>
 					</div>
 					
@@ -36,31 +142,60 @@
 	
 					<div id="sort" class="flex flex-column dropdown span-width">
 						<div class="flex flex-row flex-nowrap btn noborder toggle-dropdown span-width">
-							<h3 class = "card3 nomargin">&nbsp;Sort</h3>
+							<h3 class = "card3 nomargin">Sort</h3>
 						</div>
-	
-						<div class="flex flex-column flex-align-start card3 round dropdown-content">
-							
+						
+						
+						<div id="sorting form" class="flex flex-column flex-align-start card3 round dropdown-content">
+							<h4 class="padding_5 span-width">Sort By:</h4>
+							<label class="btn span-width half-margin noborder">
+								<input type="radio" name="sort" value="relevance" checked>
+								Relevance
+							</label>
+							<label class="btn span-width half-margin noborder">
+								<input type="radio" name="sort" value="chronological">
+								Time
+							</label>
+							<label class="btn span-width half-margin noborder">
+								<input type="radio" name="sort" value="length">
+								Length
+							</label>
+							<label class="btn span-width half-margin noborder">
+								<input type="radio" name="sort" value="alphabetical">
+								Title
+							</label>
 						</div>
 					</div>
 
-				</div>
+				</form>
 
-				<div class="flex-placeholder"></div>
-
-				<div class="round btn padding1 nomargin color-primary color-reverse span-width" id="apply-options">
+				<div class="round btn padding1 nomargin color-primary color-reverse span-width center" id="filter-sort-apply">
 					<strong>APPLY</strong>
 				</div>
 			</div>
 
 
-			<div class="card1 index color-regular">
+			<div class="card1 color-regular scrollbar overflow-x-hidden overflow-y-scroll">
+				<div class="padding2 round flex flex-column flex-align-center">
+					<h1 class="iconfont large-icon">&#xe602;</h1><h1> MOVIES MATCHING YOUR SEARCH</h1>
+					<span>Click on Arbitrary Movie to View Its Detail and Buy Tickets</span>
+				</div>
 
+				<hr/>
+
+				<div id = "movie_index" class="padding2 flex flex-column flex-justify-left flex-nowrap"></div>
 			</div>
 
 
-			<div class="card1 detail color-secondary g1">
-				
+			<div id = "movie_detail" class="card1 color-secondary g1 flex flex-column span-height">
+
+				<div class="flex flex-column flex-align-center span-width padding2">
+					<h2 class="iconfont padding1">&#xe6a3;</h2>
+					<h2 class="nopadding">MOVIE DETAIL</h2>
+				</div>
+				<hr/>
+
+
 			</div>
 		</div>
 	</body>

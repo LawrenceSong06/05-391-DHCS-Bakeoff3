@@ -43,10 +43,10 @@
     background-color: var(--g5);
 }
 
-.g1 h2{
+h1, h2, h3{
     color: var(--primary-color);
 }
 
-.g1 h3{
-    color: var(--primary-color);
+.grey{
+    background-color: rgba(179, 179, 179, 0.222);
 }

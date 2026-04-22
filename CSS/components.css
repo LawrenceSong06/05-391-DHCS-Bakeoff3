@@ -23,17 +23,19 @@
         box-shadow .2s ease-out,
         transform .2s ease-out;
     cursor: pointer;
+    user-select: none;
 }
 
+.btn *{
+    cursor: pointer;
+}
 
 .btn:hover{
     box-shadow: 0 0 .5ex rgba(38, 15, 39, 0.697);
-    transform: scale(1.01);
 }
 
 .btn:active{
     box-shadow: none;
-    transform: scale(1);
 }
 
 .btn.color-primary{
@@ -48,22 +50,51 @@
     border: solid var(--primary-color) 2px;
 }
 
+.btn.noborder{
+    border: none;
+}
+
 /* Dropdown Menu */
 .dropdown:not(.active) > .dropdown-content{
     display: none;
 }
 
-.dropdown .toggle-dropdown::before{
+.dropdown:not(.active) hr{
+    display: none;
+}
+
+.dropdown > .toggle-dropdown::before{
     font-family: "iconfont";
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-right: .5em;
 }
 
-.dropdown:not(.active) .toggle-dropdown::before{
+.dropdown:not(.active) > .toggle-dropdown::before{
     content: "\e629";
 }
 
-.dropdown.active .toggle-dropdown::before{
+.dropdown.active > .toggle-dropdown::before{
     content: "\e628";
+}
+
+form.dropdown-content{
+    margin-left: 1em;
+}
+
+/* Form Data */
+input[type="checkbox"]{
+    display: none;
+}
+
+input[type="checkbox"] + .checkmark::before{
+    font-family: "iconfont";
+    content: "\e666";
+    opacity: 0;
+    padding: .5em;
+}
+
+input[type="checkbox"]:checked + .checkmark::before{
+    opacity: 1;
 }

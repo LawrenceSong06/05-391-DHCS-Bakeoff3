@@ -3,7 +3,7 @@ body {
 	width: 100svw;
 	border: none;
 	margin: 0px;
-	text-align: center;
+	text-align: left;
 	display: flex;
     align-items: center;
     justify-content: center;
@@ -13,5 +13,24 @@ body {
 	width: 100%;
 	height: 100%;
 	display: grid;
-	grid-template-columns: .7fr 2fr 1fr;
+	grid-template-columns: 1.2fr 3fr 2fr;
+}
+
+#sidebar{
+	max-height: 100svh;
+}
+
+#selected_actors > div::before{
+	font-family: "iconfont";
+	padding-right: 1em;
+	font-size: .3em;
+	content: '\e61c';
+}
+
+#movie_index{
+	max-height: 100%;
+}
+
+#movie_detail{
+	max-height: 100svh;
 }

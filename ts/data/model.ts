@@ -80,25 +80,71 @@ class MovieQuery extends Query<movieData>{
 export default class Movies{
     private db : DB<movieData>;
 
-    public constructor(){
+    public constructor(movies : Array<movieData>){
         this.db = new DB();
         this.db.create("Movie");
-    }
-
-    /**
-     * @description Inserting a new movie data into the list of all movies
-     * @param movie 
-     */
-    public insert(movie : movieData){
-        this.db.insert("Movie", movie);
-    }
-
-    /**
-     * @description Inserting a list of new movie data into the list of all movies
-     * @param movies 
-     */
-    public insert_all(movies : Array<movieData>){
         this.db.insert_all("Movie", movies);
+    }
+
+    /**
+     * @returns all genres occured
+     */
+    public get genres(){
+        // Initializing the result array
+        let genres = [];
+        // We use a hashset to eliminate duplicates
+        let set = {};
+        
+        // Loop through all records and add their genres that are not in the list to the result list
+        const all_records = this.db.select_all().from("Movie").result;
+        all_records.forEach(movie => {
+            movie.genres.forEach(g => {
+                // If set[g], then we have already added g
+                if(set[g]){
+                    return;
+                }
+
+                // Add g and record the adding
+                genres.push(g);
+                set[g] = true;
+            });
+        });
+        
+        // Sort genres in alphabetical order
+        genres = genres.sort();
+
+        return genres;
+    }
+
+    
+    /**
+     * @returns all actors occured
+     */
+    public get actors(){
+        // Initializing the result array
+        let actors = [];
+        // We use a hashset to eliminate duplicates
+        let set = {};
+        
+        // Loop through all records and add their actors that are not in the list to the result list
+        const all_records = this.db.select_all().from("Movie").result;
+        all_records.forEach(movie => {
+            movie.actors.forEach(a => {
+                // If set[g], then we have already added g
+                if(set[a]){
+                    return;
+                }
+
+                // Add g and record the adding
+                actors.push(a);
+                set[a] = true;
+            });
+        });
+        
+        // Sort actors in alphabetical order
+        actors = actors.sort();
+
+        return actors;
     }
 
     /**
@@ -108,12 +154,12 @@ export default class Movies{
      * @example
      * // Sample query:
      * // This query selects all movies that has "Animated" in its genre and then order the result alphabetically.
-     * movie_model.query()
+     * movie_model.select_all()
      *  .filter_by("genres", {include: ["Animated"]})
      *  .order_by("alphabetical")
      *  .result
      */
-    public query(){
+    public select_all(){
         let res = new MovieQuery(this.db);
         res.from("Movie");
         return res;
@@ -133,7 +179,14 @@ const scope = {
     // Filtering
     filter: {
         // Filter the movies by their movie length        
-        "length": function({from = -Infinity, to = Infinity}){
+        "length": function({from, to}){
+            if(!from){
+                from = -Infinity;
+            }
+            if(!to){
+                to = Infinity;
+            }
+            
             return function(movie : movieData){
                 return from <= movie.movieLength && movie.movieLength <= to;
             }
@@ -168,7 +221,11 @@ const scope = {
         // Filtering the movies by genres. If a movie has any genre in the provided list, it will be included
         "genres": function({include = [], exclude = []}){
             return function(movie : movieData){
-                return intersect(movie.genres, include).length != 0 &&
+                if(!include || !include.length){
+                    return intersect(movie.genres, exclude).length == 0;
+                }
+
+                return intersect(movie.genres, include).length == include.length &&
                     intersect(movie.genres, exclude).length == 0;
             }
         },
@@ -176,7 +233,11 @@ const scope = {
         // Filtering the movies by actors. If a movie has any actors in the provided list, it will be included
         "actors": function({include = [], exclude = []}){
             return function(movie : movieData){
-                return intersect(movie.actors, include).length != 0 &&
+                if(!include || !include.length){
+                    return intersect(movie.actors, exclude).length == 0;
+                }
+
+                return intersect(movie.actors, include).length == include.length &&
                     intersect(movie.actors, exclude).length == 0;
             }
         }

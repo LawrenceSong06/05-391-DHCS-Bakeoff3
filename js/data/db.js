@@ -10,6 +10,7 @@ export class Query {
     }
     from(table_name) {
         this.from_table = table_name;
+        return this;
     }
     /**
      * @description A filtering for query. Only a record `r` is included in the query result only if `cond(r)==true`
@@ -94,7 +95,6 @@ export class DB {
     }
     /**
      * @description Querying the database
-     * @param table the table to be queried
      * @returns a query object
      *
      * @example
@@ -102,9 +102,9 @@ export class DB {
      * // This returns all records in table1
      * // Notice that the ".result" must be included to execute the query.
      * // Otherwise, it will remain as the query object.
-     * db.select_from("table1").result
+     * db.select_all().from("table1").result
      */
-    query(table) {
+    select_all() {
         return new Query(this);
     }
 }
