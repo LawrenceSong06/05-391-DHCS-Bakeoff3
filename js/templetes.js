@@ -45,7 +45,7 @@ export function create_actor_select(actor) {
     res.innerText = actor;
     return res;
 }
-export function create_selected_actor(actor) {
+export function create_selected_actor(actor, opt) {
     let res = document.createElement("div");
     res.classList.add("grey");
     res.classList.add("half-margin");
@@ -54,7 +54,7 @@ export function create_selected_actor(actor) {
     res.style.display = "inline-block";
     res.innerText = actor;
     let data = document.createElement("input");
-    data.name = "includes-actors";
+    data.name = `${opt}s-actors`;
     data.type = "hidden";
     data.value = actor;
     res.appendChild(data);

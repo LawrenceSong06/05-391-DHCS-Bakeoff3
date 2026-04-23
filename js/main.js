@@ -100,11 +100,37 @@ window.addEventListener("load", async (e) => {
             });
         });
     });
+    // Min and max length
+    {
+        let min_length = document.getElementById("min-length");
+        let min_length_label = document.getElementById("min-length-label");
+        let max_length = document.getElementById("max-length");
+        let max_length_label = document.getElementById("max-length-label");
+        let max = Movie.select_all().sort_by("length").result.reverse()[0].movieLength;
+        max_length.max = `${max}`;
+        min_length.max = `${max}`;
+        max_length.value = max_length.max;
+        max_length_label.innerText = max_length.value + " min";
+        min_length_label.innerText = min_length.value + " min";
+        min_length.addEventListener("input", () => {
+            if (parseInt(min_length.value) > parseInt(max_length.value)) {
+                min_length.value = max_length.value;
+            }
+            min_length_label.innerText = min_length.value + " min";
+        });
+        max_length.addEventListener("input", () => {
+            if (parseInt(max_length.value) < parseInt(min_length.value)) {
+                max_length.value = min_length.value;
+            }
+            max_length_label.innerText = max_length.value + " min";
+        });
+    }
     // ========= Actor Searching ==========	
-    let selected_actors = document.getElementById("selected_actors");
+    let included_actors = document.getElementById("included_actors");
+    let excluded_actors = document.getElementById("excluded_actors");
     let search_actor_input = document.getElementById("search_actor");
     let actor_prompts = document.getElementById("actor_prompts");
-    search_actor_input.addEventListener("input", (e) => {
+    function load_actor_prompts() {
         let target = search_actor_input.value;
         // Return the 5 actors that is searched by the user most possibly
         let search_actors = actors.map((a) => {
@@ -119,13 +145,24 @@ window.addEventListener("load", async (e) => {
             let select_a = Templete.create_actor_select(a);
             select_a.addEventListener("click", () => {
                 let data = new FormData(filter_sort_form);
-                if (data.getAll("includes-actors").indexOf(a) != -1) {
+                if (data.getAll("includes-actors").indexOf(a) != -1 ||
+                    data.getAll("excludes-actors").indexOf(a) != -1) {
                     return;
                 }
-                selected_actors.appendChild(Templete.create_selected_actor(a));
+                const opt = data.get("actor-option");
+                if (opt == "include") {
+                    included_actors.appendChild(Templete.create_selected_actor(a, opt));
+                }
+                else {
+                    excluded_actors.appendChild(Templete.create_selected_actor(a, opt));
+                }
             });
             actor_prompts.appendChild(select_a);
         });
+    }
+    load_actor_prompts();
+    search_actor_input.addEventListener("input", (e) => {
+        load_actor_prompts();
     });
     function insert_index_card(movie) {
         let index_card = Templete.create_index_card(movie);

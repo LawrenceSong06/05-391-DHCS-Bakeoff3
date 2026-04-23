@@ -53,7 +53,7 @@ export function create_actor_select(actor : string){
     return res;
 }
 
-export function create_selected_actor(actor: string){
+export function create_selected_actor(actor: string, opt){
     let res = document.createElement("div");
     res.classList.add("grey");
     res.classList.add("half-margin");
@@ -63,7 +63,7 @@ export function create_selected_actor(actor: string){
     res.innerText = actor;
 
     let data = document.createElement("input");
-    data.name = "includes-actors";
+    data.name = `${opt}s-actors`;
     data.type = "hidden";
     data.value = actor;
     

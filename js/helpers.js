@@ -5,7 +5,9 @@
  * This algorithm computes the fewest edits (insert/delete/replace) needed to change string from `s` to `p`.
  * This algorithm is implemented by dynamic programming.
  */
-export function string_difference(s, p) {
+export function string_difference(S, P) {
+    const s = S.split(" ").join().toLowerCase();
+    const p = P.split(" ").join().toLowerCase();
     let n = s.length;
     let m = p.length;
     let MED = Array.from({ length: n + 1 }, () => Array(m + 1).fill(0));

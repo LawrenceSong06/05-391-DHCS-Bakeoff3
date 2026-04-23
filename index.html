@@ -57,19 +57,47 @@
 									Actor
 								</h4>
 
+								
 								<!-- The core part of actor filter -->
 								<div class="dropdown-content padding_5" id="actor-form">
-									<div id="selected_actors" class="flex flex-row">
+									<span>Excludes: </span>
+									<div id="excluded_actors" class="flex flex-row">
+
+									</div>
+
+									<br/>
+
+									<span>Includes: </span>
+
+									<br/>
+
+									<div id="included_actors" class="flex flex-row">
 										<!-- These are the selected actors to be included. The input with -->
 										<!-- hidden as its type will be placed here, along with a <p> -->
 										<!-- demonstrating what is added. If one of those <p> is clicked, an added
 											actor will be removed from the list -->
 									</div>
-
-									<label>
+											
+									<strong>
 										Search for an actor:
-									</label>
-									<input id="search_actor" type="text" class="btn noborder bottom-border nobackground padding_5">
+									</strong>
+									<br/>
+
+									<input id="search_actor" type="text" class="btn noborder bottom-border nobackground">
+
+									<div class="switch btn nopadding noborder round">												
+										<label for="end-time-option" class="active">
+											<input type="radio" name="actor-option" value="include" checked>
+											Include
+										</label>
+										<label for="end-time-option">
+											<input type="radio" name="actor-option" value="exclude">
+											Exclude
+										</label>
+									</div>
+									
+									<br/>
+
 									<div id="actor_prompts">
 										<!-- This is the prompting area, which will later be filled by prompting 
 										 implemented by JS -->
@@ -90,43 +118,44 @@
 
 								<!-- Filter by start time -->
 								<div class="dropdown-content padding_5" id="time-form">
-									
-									<div class="flex flex-row flex-align-center">
-										<div class="flex flex-column">
-											<p>Starts</p>
-
-											<div class="switch btn nopadding noborder round">												
-												<label for="start-time-option" class="active">
-													<input type="radio" name="start-time-option" value="Before" checked>
-													before
-												</label>
-												<label for="start-time-option">
-													<input type="radio" name="start-time-option" value="after">
-													after
-												</label>
+									<div class="flex flex-row gap-1">										
+										<div class="flex flex-row flex-align-center">
+											<div class="flex flex-column">
+												<strong>Starts</strong>
+	
+												<div class="switch btn nopadding noborder round">												
+													<label for="start-time-option" class="active">
+														<input type="radio" name="start-time-option" value="before" checked>
+														before
+													</label>
+													<label for="start-time-option">
+														<input type="radio" name="start-time-option" value="after">
+														after
+													</label>
+												</div>
+												<input type="time" name="start-time">
 											</div>
-											<input type="time" name="start-time">
 										</div>
-									</div>
-
-									<br/>
-
-									<!-- Filter by end time -->
-									<label>
-										<strong>Ends</strong>
-									</label>
-
-									<div class="flex flex-row flex-align-center">
-										<div class="flex flex-column">
-											<label for="end-time-after">After:</label>
-											<input type="time" name="end-time-after">
-										</div>
-										
-										<p class="iconfont padding_5">&#xe600;</p>
-
-										<div class="flex flex-column">
-											<label for="end-time-before">Before:</label>
-											<input type="time" name="end-time-before">
+	
+										<br/>
+	
+										<!-- Filter by end time -->
+										<div class="flex flex-row flex-align-center">
+											<div class="flex flex-column">
+												<strong>Ends</strong>
+	
+												<div class="switch btn nopadding noborder round">												
+													<label for="end-time-option" class="active">
+														<input type="radio" name="end-time-option" value="Before" checked>
+														before
+													</label>
+													<label for="end-time-option">
+														<input type="radio" name="end-time-option" value="after">
+														after
+													</label>
+												</div>
+												<input type="time" name="end-time">
+											</div>
 										</div>
 									</div>
 
@@ -135,17 +164,15 @@
 									<!-- Filter by movie length -->
 									<label>
 										<strong>Length</strong>
+										<br/>
+										<label for="min-length" id="min-length-label"></label>
+										<strong>--</strong>
+										<label for="max-length" id="max-length-label"></label>
 									</label>
 
-									<div class="flex flex-row flex-align-center">
-										<div class="flex flex-column">
-											<label for="min-length">Min Length (min):</label>
-											<input type="number" name="min-length">
-										</div>
-										<div class="flex flex-column">
-											<label for="max-length">Max Length (min):</label>
-											<input type="number" name="max-length">
-										</div>
+									<div class="flex flex-column">
+										<input type="range" id="min-length" step="5" min="0" value="0" name="min-length">
+										<input type="range" id="max-length" step="5" min="0" name="max-length">
 									</div>
 
 								</div>

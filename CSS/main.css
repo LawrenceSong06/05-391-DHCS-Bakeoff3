@@ -20,7 +20,7 @@ body {
 	max-height: 100svh;
 }
 
-#selected_actors > div::before{
+#included_actors > div::before, #excluded_actors > div::before{
 	font-family: "iconfont";
 	padding-right: 1em;
 	font-size: .3em;

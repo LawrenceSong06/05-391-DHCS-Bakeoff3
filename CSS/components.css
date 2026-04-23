@@ -119,18 +119,22 @@ input[type="checkbox"]:checked + .checkmark::before{
     display: none;
 }
 
+.switch{
+    width: fit-content;
+}
+
 .switch input[type="radio"]{
     display: none;
 }
 
-.switch label{
+.switch > *{
     background: var(--g3);
     color: white;
     padding-left: .2em;
     padding-right: .2em;
 }
 
-.switch label.active{
+.switch > *.active{
     opacity: 1;
     background: var(--primary-color);
     color: white;

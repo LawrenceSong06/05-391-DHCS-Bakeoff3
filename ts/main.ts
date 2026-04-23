@@ -2,6 +2,7 @@
 import Movies from "./data/model.js";
 import * as Templete from "./templetes.js"
 import * as Helpers from "./helpers.js"
+import { min } from "./data/time.js";
 
 //  ============= CHANGED (start) ==============
 // You can define some test movies (here, or in a .js file loaded before this one in the html) and pass them into the Trial engine to test different movie datasets.
@@ -114,11 +115,43 @@ window.addEventListener("load", async (e: Event) => {
 		});
 	});
 	
+	// Min and max length
+	{
+		let min_length : HTMLInputElement = document.getElementById("min-length") as HTMLInputElement;
+		let min_length_label = document.getElementById("min-length-label");
+		let max_length : HTMLInputElement = document.getElementById("max-length") as HTMLInputElement;
+		let max_length_label = document.getElementById("max-length-label");
+	
+		let max = Movie.select_all().sort_by("length").result.reverse()[0].movieLength;
+		max_length.max = `${max}`;
+		min_length.max = `${max}`;
+		max_length.value = max_length.max;
+	
+		max_length_label.innerText = max_length.value + " min";
+		min_length_label.innerText = min_length.value + " min";
+	
+	
+		min_length.addEventListener("input", ()=>{
+			if(parseInt(min_length.value) > parseInt(max_length.value)){
+				min_length.value = max_length.value;
+			}
+			min_length_label.innerText = min_length.value + " min";
+		});
+		max_length.addEventListener("input", ()=>{
+			if(parseInt(max_length.value) < parseInt(min_length.value)){
+				max_length.value = min_length.value;
+			}
+			max_length_label.innerText = max_length.value + " min";
+		});
+	}
+
 	// ========= Actor Searching ==========	
-	let selected_actors : HTMLDivElement = document.getElementById("selected_actors") as HTMLDivElement;
+	let included_actors : HTMLDivElement = document.getElementById("included_actors") as HTMLDivElement;
+	let excluded_actors : HTMLDivElement = document.getElementById("excluded_actors") as HTMLDivElement;
 	let search_actor_input : HTMLInputElement = document.getElementById("search_actor") as HTMLInputElement;
 	let actor_prompts : HTMLDivElement = document.getElementById("actor_prompts") as HTMLDivElement;
-	search_actor_input.addEventListener("input", (e)=>{
+
+	function load_actor_prompts(){
 		let target = search_actor_input.value;
 
 		// Return the 5 actors that is searched by the user most possibly
@@ -137,15 +170,29 @@ window.addEventListener("load", async (e: Event) => {
 			let select_a = Templete.create_actor_select(a);
 			select_a.addEventListener("click", ()=>{
 				let data = new FormData(filter_sort_form);
-				if(data.getAll("includes-actors").indexOf(a) != -1){
+				if(
+					data.getAll("includes-actors").indexOf(a) != -1 || 
+					data.getAll("excludes-actors").indexOf(a) != -1
+				){
 					return;
 				}
-				selected_actors.appendChild(Templete.create_selected_actor(a));
+				
+				const opt = data.get("actor-option");
+				if(opt == "include"){
+					included_actors.appendChild(Templete.create_selected_actor(a, opt));
+				}else{
+					excluded_actors.appendChild(Templete.create_selected_actor(a, opt));
+				}
 			});
 
 			actor_prompts.appendChild(select_a);
 		});
+	}
+	load_actor_prompts();
+	search_actor_input.addEventListener("input", (e)=>{
+		load_actor_prompts();
 	});
+	
 
 	function insert_index_card(movie){
 		let index_card = Templete.create_index_card(movie);
