@@ -132,6 +132,7 @@ export function create_index_card(movie) {
     res.appendChild(tags);
     tags.append(create_tags("Genre(s):", movie.genres));
     tags.append(create_tags("Length:", [movie.movieLength + " min"]));
+    tags.append(create_tags("Starts At:", movie.movieTimes));
     tags.append(create_tags("Actors:", movie.actors));
     return res;
 }

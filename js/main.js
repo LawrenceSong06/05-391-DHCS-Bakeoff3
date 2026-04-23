@@ -77,6 +77,29 @@ window.addEventListener("load", async (e) => {
     genres.forEach(g => {
         genre_form.appendChild(Templete.create_genre_filter(g));
     });
+    // The reverse order option in the order form
+    let reverse_order = document.getElementById("reverse-order");
+    let reverse_order_check = reverse_order.querySelector("input[type='checkbox']");
+    reverse_order.addEventListener("click", () => {
+        reverse_order_check.checked = !reverse_order_check.checked;
+        reverse_order.classList.toggle("active");
+    });
+    // All switches (defined by class). A switch is a div with two radio buttons in it.
+    // Every click on a switch "switches" the chosen radio button
+    let switches = Array.from(document.getElementsByClassName("switch"));
+    switches.forEach((s) => {
+        s.addEventListener("click", () => {
+            console.log(1);
+            let labels = Array.from(s.getElementsByTagName("label"));
+            labels.forEach(l => {
+                l.classList.toggle("active");
+            });
+            let radios = Array.from(s.getElementsByTagName("input"));
+            radios.forEach(r => {
+                r.checked = !r.checked;
+            });
+        });
+    });
     // ========= Actor Searching ==========	
     let selected_actors = document.getElementById("selected_actors");
     let search_actor_input = document.getElementById("search_actor");
@@ -125,8 +148,9 @@ window.addEventListener("load", async (e) => {
         let min_length = data.get("min-length");
         let max_length = data.get("max-length");
         let sort = data.get("sort");
+        let reverse_order = data.get("reverse-order") === "on";
         // Querying Movies
-        const res = Movie.select_all()
+        let res = Movie.select_all()
             .filter_by("genres", { include: genres })
             .filter_by("actors", { include: actors })
             .filter_by("time", {
@@ -136,6 +160,9 @@ window.addEventListener("load", async (e) => {
             .filter_by("length", { from: min_length, to: max_length })
             .sort_by(sort, { actors: actors, genres: genres })
             .result;
+        if (reverse_order) {
+            res = res.reverse();
+        }
         movie_index.replaceChildren();
         if (res.length == 0) {
             let notice = document.createElement("h4");

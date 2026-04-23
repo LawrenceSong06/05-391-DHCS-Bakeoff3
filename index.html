@@ -13,6 +13,7 @@
 	</head>
 	<body>
 		<div id="main">
+			<!-- The Sidebar that contains all filter and orders -->
 			<div id="sidebar" class="card1 color-secondary flex flex-column flex-justify-start flex-align-start g1">
 				<div class="flex flex-column flex-align-center span-width padding2">
 					<h2 class="iconfont padding1">&#xe665;</h2>
@@ -20,13 +21,19 @@
 				</div>
 				<hr/>
 				
+				<!-- The form that contains information about the filters and orders applied -->
 				<form id="filter-sort" class="span-width overflow-y-scroll overflow-x-hidden flex-fill scrollbar">
 
+					<!-- The filters -->
 					<div id="filters" class="flex flex-column dropdown span-width">
 						<div class="flex flex-row flex-nowrap btn noborder toggle-dropdown span-width">
-							<h3 class = "card3 nomargin">Filters</h3>
+							<h3 class = "card3 nomargin">
+								<span class="iconfont">&#xe839;</span> 
+								Filter
+							</h3>
 						</div>
 	
+						<!-- The menu to filter by genre -->
 						<div class="flex flex-column flex-align-start card3 round dropdown-content padding_5">
 							<div class="dropdown span-width">
 								<h4 class="padding_5 btn noborder span-width flex flex-row toggle-dropdown">
@@ -34,7 +41,8 @@
 								</h4>
 
 								<div class="dropdown-content padding_5" id="genre-form">
-
+									<!-- This is left blank for JS to fill -->
+									<!-- We do not know the genres until the data is fetched -->
 								</div>
 							</div>
 
@@ -42,25 +50,29 @@
 
 						<hr/>
 
+						<!-- Filtering by actors -->
 						<div class="flex flex-column flex-align-start card3 round dropdown-content padding_5">
 							<div class="dropdown span-width">
 								<h4 class="padding_5 btn noborder span-width flex flex-row toggle-dropdown">
 									Actor
 								</h4>
 
+								<!-- The core part of actor filter -->
 								<div class="dropdown-content padding_5" id="actor-form">
 									<div id="selected_actors" class="flex flex-row">
-
+										<!-- These are the selected actors to be included. The input with -->
+										<!-- hidden as its type will be placed here, along with a <p> -->
+										<!-- demonstrating what is added. If one of those <p> is clicked, an added
+											actor will be removed from the list -->
 									</div>
 
 									<label>
-										<strong>
-											Search for an actor:
-										</strong>
+										Search for an actor:
 									</label>
 									<input id="search_actor" type="text" class="btn noborder bottom-border nobackground padding_5">
 									<div id="actor_prompts">
-
+										<!-- This is the prompting area, which will later be filled by prompting 
+										 implemented by JS -->
 									</div>
 								</div>
 							</div>
@@ -69,36 +81,39 @@
 
 						<hr/>
 
+						<!-- The filter by time -->
 						<div class="flex flex-column flex-align-start card3 round dropdown-content padding_5">
 							<div class="dropdown span-width">
 								<h4 class="padding_5 btn noborder span-width flex flex-row toggle-dropdown">
 									Time
 								</h4>
 
+								<!-- Filter by start time -->
 								<div class="dropdown-content padding_5" id="time-form">
-									<label>
-										<strong>Start time</strong>
-									</label>
-									<br/>
-
+									
 									<div class="flex flex-row flex-align-center">
 										<div class="flex flex-column">
-											<label for="start-time-after">After:</label>
-											<input type="time" name="start-time-after">
-										</div>
-										
-										<p class="iconfont padding_5">&#xe600;</p>
+											<p>Starts</p>
 
-										<div class="flex flex-column">
-											<label for="start-time-before">Before:</label>
-											<input type="time" name="start-time-before">
+											<div class="switch btn nopadding noborder round">												
+												<label for="start-time-option" class="active">
+													<input type="radio" name="start-time-option" value="Before" checked>
+													before
+												</label>
+												<label for="start-time-option">
+													<input type="radio" name="start-time-option" value="after">
+													after
+												</label>
+											</div>
+											<input type="time" name="start-time">
 										</div>
 									</div>
 
 									<br/>
 
+									<!-- Filter by end time -->
 									<label>
-										<strong>End time</strong>
+										<strong>Ends</strong>
 									</label>
 
 									<div class="flex flex-row flex-align-center">
@@ -117,6 +132,7 @@
 
 									<br/>
 
+									<!-- Filter by movie length -->
 									<label>
 										<strong>Length</strong>
 									</label>
@@ -140,41 +156,65 @@
 					
 					<hr/>
 	
+					<!-- The sorting orders -->
 					<div id="sort" class="flex flex-column dropdown span-width">
 						<div class="flex flex-row flex-nowrap btn noborder toggle-dropdown span-width">
-							<h3 class = "card3 nomargin">Sort</h3>
+							<h3 class = "card3 nomargin">
+								<span class="iconfont">&#xe70c;</span> 
+								Sort
+							</h3>
 						</div>
 						
-						
+						<!-- Only one sorting will be applied. -->
+						<!-- Particularly, one of the following: -->
+						<!-- Relevance (to the filtering options), time (chronologically), 
+						 length (from short to long), and title (alphabetically) -->
 						<div id="sorting form" class="flex flex-column flex-align-start card3 round dropdown-content">
+							<h4 class="padding_5 span-width">Order:</h4>
+							<div class="btn round middle-icon half-margin" id="reverse-order">
+								<input type="checkbox" name="reverse-order"/>
+								<div class="iconfont"></div>
+							</div>
+
 							<h4 class="padding_5 span-width">Sort By:</h4>
 							<label class="btn span-width half-margin noborder">
 								<input type="radio" name="sort" value="relevance" checked>
+								<span class="positive-order">Highest</span> 
+								<span class="negative-order">Lowest</span> 
 								Relevance
 							</label>
 							<label class="btn span-width half-margin noborder">
 								<input type="radio" name="sort" value="chronological">
-								Time
+								<span class="positive-order">Ealierst</span> 
+								<span class="negative-order">Latest</span> 
+								Available Time
 							</label>
 							<label class="btn span-width half-margin noborder">
 								<input type="radio" name="sort" value="length">
-								Length
+								<span class="positive-order">Shortest</span> 
+								<span class="negative-order">Longest</span> 
+								Movie
 							</label>
 							<label class="btn span-width half-margin noborder">
 								<input type="radio" name="sort" value="alphabetical">
-								Title
+								Title 
+								<span class="positive-order">A-z</span>
+								<span class="negative-order">z-A</span>
 							</label>
 						</div>
 					</div>
 
 				</form>
 
+				<!-- The button to submit the filter/order form -->
+				<!-- After submitted, those filters and orders are applied -->
 				<div class="round btn padding1 nomargin color-primary color-reverse span-width center" id="filter-sort-apply">
 					<strong>APPLY</strong>
 				</div>
 			</div>
 
 
+			<!-- The central movie listing area -->
 			<div class="card1 color-regular scrollbar overflow-x-hidden overflow-y-scroll">
 				<div class="padding2 round flex flex-column flex-align-center">
 					<h1 class="iconfont large-icon">&#xe602;</h1><h1> MOVIES MATCHING YOUR SEARCH</h1>
@@ -183,10 +223,13 @@
 
 				<hr/>
 
-				<div id = "movie_index" class="padding2 flex flex-column flex-justify-left flex-nowrap"></div>
+				<div id = "movie_index" class="padding2 flex flex-column flex-justify-left flex-nowrap">
+					<!-- This is the place where the brief description of all movies will be placed -->
+				</div>
 			</div>
 
 
+			<!-- Movie detail, its content will completely be replaced by JS once a movie is selected from the list -->
 			<div id = "movie_detail" class="card1 color-secondary g1 flex flex-column span-height">
 
 				<div class="flex flex-column flex-align-center span-width padding2">

@@ -87,6 +87,32 @@ window.addEventListener("load", async (e: Event) => {
 	genres.forEach(g => {
 		genre_form.appendChild(Templete.create_genre_filter(g));
 	});
+
+	// The reverse order option in the order form
+	let reverse_order = document.getElementById("reverse-order");
+	let reverse_order_check : HTMLInputElement= reverse_order.querySelector("input[type='checkbox']");
+	reverse_order.addEventListener("click", ()=>{
+		reverse_order_check.checked = !reverse_order_check.checked;
+		reverse_order.classList.toggle("active");
+	});
+
+	// All switches (defined by class). A switch is a div with two radio buttons in it.
+	// Every click on a switch "switches" the chosen radio button
+	let switches = Array.from(document.getElementsByClassName("switch"));
+	switches.forEach((s) => {
+		s.addEventListener("click", ()=>{
+			console.log(1);
+			let labels = Array.from(s.getElementsByTagName("label"));
+			labels.forEach(l => {
+				l.classList.toggle("active");
+			});
+
+			let radios = Array.from(s.getElementsByTagName("input"));
+			radios.forEach(r => {
+				r.checked = !r.checked;
+			});
+		});
+	});
 	
 	// ========= Actor Searching ==========	
 	let selected_actors : HTMLDivElement = document.getElementById("selected_actors") as HTMLDivElement;
@@ -150,8 +176,10 @@ window.addEventListener("load", async (e: Event) => {
 
 		let sort : string = data.get("sort") as string;
 
+		let reverse_order : boolean = data.get("reverse-order") === "on";
+
 		// Querying Movies
-		const res = Movie.select_all()
+		let res = Movie.select_all()
 		.filter_by("genres", {include: genres})
 		.filter_by("actors", {include: actors})
 		.filter_by("time", {
@@ -161,6 +189,10 @@ window.addEventListener("load", async (e: Event) => {
 		.filter_by("length", {from: min_length, to: max_length})
 		.sort_by(sort, {actors: actors, genres: genres})
 		.result;
+
+		if(reverse_order){
+			res = res.reverse();
+		}
 
 		movie_index.replaceChildren();
 		if(res.length == 0){
