@@ -31,6 +31,11 @@ body {
 	max-height: 100%;
 }
 
-#movie_detail{
+#movie_index .active{
+	/* background-color: var(--g3); */
+	border: solid 2px var(--primary-color);
+}
+
+#movie_checkout{
 	max-height: 100svh;
 }

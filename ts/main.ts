@@ -80,7 +80,7 @@ window.addEventListener("load", async (e: Event) => {
 	// Some key components of the page:
 	let filter_sort_form : HTMLFormElement = document.getElementById("filter-sort") as HTMLFormElement;
 	let movie_index : HTMLDivElement = document.getElementById("movie_index") as HTMLDivElement;
-	let movie_detail : HTMLDivElement = document.getElementById("movie_detail") as HTMLDivElement;
+	let movie_checkout : HTMLDivElement = document.getElementById("movie_checkout") as HTMLDivElement;
 
 	// Generating filters for each genre, and put them into the genre filter form
 	// so that the user can access them through the UI
@@ -102,7 +102,6 @@ window.addEventListener("load", async (e: Event) => {
 	let switches = Array.from(document.getElementsByClassName("switch"));
 	switches.forEach((s) => {
 		s.addEventListener("click", ()=>{
-			console.log(1);
 			let labels = Array.from(s.getElementsByTagName("label"));
 			labels.forEach(l => {
 				l.classList.toggle("active");
@@ -115,6 +114,14 @@ window.addEventListener("load", async (e: Event) => {
 		});
 	});
 	
+	{
+		let clear_time = document.getElementById("clear-time");
+		clear_time.addEventListener("click", ()=>{
+			(document.querySelector("input[name='start-time']") as HTMLInputElement).value = "";
+			(document.querySelector("input[name='end-time']") as HTMLInputElement).value = "";
+		});
+	}
+
 	// Min and max length
 	{
 		let min_length : HTMLInputElement = document.getElementById("min-length") as HTMLInputElement;
@@ -181,7 +188,7 @@ window.addEventListener("load", async (e: Event) => {
 				if(opt == "include"){
 					included_actors.appendChild(Templete.create_selected_actor(a, opt));
 				}else{
-					excluded_actors.appendChild(Templete.create_selected_actor(a, opt));
+					included_actors.appendChild(Templete.create_selected_actor(a, opt));
 				}
 			});
 
@@ -199,7 +206,15 @@ window.addEventListener("load", async (e: Event) => {
 		movie_index.appendChild(index_card);
 
 		index_card.addEventListener("click", ()=>{
-			movie_detail.replaceChildren(Templete.create_detail(movie, trial));
+			if(!index_card.classList.contains("active")){
+				Array.from(movie_index.children).forEach(m => {
+					m.classList.remove("active")
+				});
+				index_card.classList.add("active");
+			}else{
+				index_card.classList.remove("active")
+			}
+			movie_checkout.replaceChildren(Templete.create_checkout(movie, trial));
 		});
 	}
 
@@ -210,13 +225,17 @@ window.addEventListener("load", async (e: Event) => {
 		let data = new FormData(filter_sort_form);
 		
 		let genres = data.getAll("includes-genres");
-		let actors = data.getAll("includes-actors");
 
-		let start_time_after = data.get("start-time-after");
-		let start_time_before = data.get("start-time-before");
+		let includes_actors = data.getAll("includes-actors");
+		let excludes_actors = data.getAll("excludes-actors");
 
-		let end_time_after = data.get("end-time-after");
-		let end_time_before = data.get("end-time-before");
+		let start_time = {};
+		let start_time_option = data.get("start-time-option") as string;
+		start_time[start_time_option] = data.get("start-time");
+
+		let end_time = {};
+		let end_time_option = data.get("end-time-option") as string;
+		end_time[end_time_option] = data.get("end-time");
 
 		let min_length = data.get("min-length");
 		let max_length = data.get("max-length");
@@ -228,10 +247,10 @@ window.addEventListener("load", async (e: Event) => {
 		// Querying Movies
 		let res = Movie.select_all()
 		.filter_by("genres", {include: genres})
-		.filter_by("actors", {include: actors})
+		.filter_by("actors", {include: includes_actors, exclude: excludes_actors})
 		.filter_by("time", {
-			starts: {after: start_time_after, before: start_time_before},
-			ends: {after: end_time_after, before: end_time_before}
+			starts: {after: start_time["after"], before: start_time["before"]},
+			ends: {after: end_time["after"], before: end_time["before"]}
 		})
 		.filter_by("length", {from: min_length, to: max_length})
 		.sort_by(sort, {actors: actors, genres: genres})

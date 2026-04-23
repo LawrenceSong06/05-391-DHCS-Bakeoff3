@@ -1,3 +1,5 @@
+import * as Time  from "./data/time.js";
+
 /**
  * @description creates a filter checkbox using the following templete:
  *      <div class="btn round noborder">
@@ -150,22 +152,24 @@ export function create_index_card(movie){
     tags.classList.add("flex");
     tags.classList.add("flex-column");
     tags.style.borderLeft = "solid 2px black";
-    tags.style.maxHeight = "50em";
-    tags.style.minHeight = "50px";
     tags.style.paddingLeft = "1em";
     tags.style.overflow = "hidden";
     res.appendChild(tags);
 
+    function duration(t){
+        return `${t} -- ${Time.toString(Time.parseTime(t) + movie.movieLength)}`
+    }
 
     tags.append(create_tags("Genre(s):", movie.genres));
     tags.append(create_tags("Length:", [movie.movieLength + " min"]));
-    tags.append(create_tags("Starts At:", movie.movieTimes));
+    tags.append(create_tags("Times:", movie.movieTimes.map((t)=>{return duration(t)})));
     tags.append(create_tags("Actors:", movie.actors));
+    tags.append(create_paragraph("Description", movie.description));
 
     return res;
 }
 
-export function create_detail(movie, trial){
+export function create_checkout(movie, trial){
     // The container
     let res = document.createElement("div");
     res.className = "noborder round span-height flex flex-column";
@@ -177,39 +181,30 @@ export function create_detail(movie, trial){
     
     let icon = document.createElement("h2");
     icon.className = "iconfont padding1";
-    icon.innerHTML = "&#xe6a3;";
+    icon.innerHTML = "&#xe682;";
     title.appendChild(icon);
 
     let title_text = document.createElement("h2");
-    title_text.className = "nopadding";
+    title_text.className = "nopadding center";
     title_text.innerText = movie.title;
     title.appendChild(title_text);
     
     res.appendChild(title);
     res.appendChild(document.createElement("hr"));
 
-    // The other details of the movie
-    let details = document.createElement("div");
-    details.className = "span-width overflow-y-scroll overflow-x-hidden flex-fill scrollbar";
-    res.appendChild(details);
+    let review = document.createElement("div");
+    review.classList.add("flex-fill");
+    review.classList.add("overflow-x-hidden");
+    review.classList.add("overflow-y-scroll");
+    review.classList.add("scrollbar");
+    res.appendChild(review);
 
-
-    // Tags, as before
-    let tags = document.createElement("div");
-    tags.className = "margin flex flex-column"
-    details.appendChild(tags);
-
-    tags.append(create_tags("Genre(s):", movie.genres));
-    tags.append(create_tags("Length:", [movie.movieLength + " min"]));
-    tags.append(create_tags("Actors:", movie.actors));
-    
-    // Description
-    let desc = create_paragraph("Description:", movie.description);
-    desc.classList.add("flex-fill");
-    details.appendChild(desc);
+    review.appendChild(create_tags("Genres: ", movie.genres));
+    review.appendChild(create_tags("Actors: ", movie.actors));
+    review.appendChild(create_tags("Length: ", [movie.movieLength + " min"]));
     
     res.appendChild(document.createElement("hr"));
-    
+
     // Form for the final submission
     let form = document.createElement("form");
     form.className = "flex flex-column gap-_5 padding1"
@@ -226,7 +221,7 @@ export function create_detail(movie, trial){
 
     let select_time_label = document.createElement("label");
     select_time_label.htmlFor = "time";
-    select_time_label.innerText = "Start Time: ";
+    select_time_label.innerText = "Time: ";
     time_container.appendChild(select_time_label);
     
     let select_time = document.createElement("select");
@@ -235,7 +230,7 @@ export function create_detail(movie, trial){
     movie.movieTimes.forEach(t => {
         let option = document.createElement("option");
         option.value = t;
-        option.textContent = t;
+        option.textContent = `${t} -- ${Time.toString(Time.parseTime(t) + movie.movieLength)}`;
         select_time.appendChild(option);
     });
     

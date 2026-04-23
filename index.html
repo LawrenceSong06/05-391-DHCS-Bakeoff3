@@ -95,7 +95,7 @@
 											Exclude
 										</label>
 									</div>
-									
+
 									<br/>
 
 									<div id="actor_prompts">
@@ -146,7 +146,7 @@
 	
 												<div class="switch btn nopadding noborder round">												
 													<label for="end-time-option" class="active">
-														<input type="radio" name="end-time-option" value="Before" checked>
+														<input type="radio" name="end-time-option" value="before" checked>
 														before
 													</label>
 													<label for="end-time-option">
@@ -157,6 +157,8 @@
 												<input type="time" name="end-time">
 											</div>
 										</div>
+
+										<div class="btn padding_5 thin-border round flex flex-column flex-justify-center" id="clear-time">Clear</div>
 									</div>
 
 									<br/>
@@ -245,7 +247,7 @@
 			<div class="card1 color-regular scrollbar overflow-x-hidden overflow-y-scroll">
 				<div class="padding2 round flex flex-column flex-align-center">
 					<h1 class="iconfont large-icon">&#xe602;</h1><h1> MOVIES MATCHING YOUR SEARCH</h1>
-					<span>Click on Arbitrary Movie to View Its Detail and Buy Tickets</span>
+					<span>Click on Arbitrary Movie to Buy Tickets</span>
 				</div>
 
 				<hr/>
@@ -256,12 +258,12 @@
 			</div>
 
 
-			<!-- Movie detail, its content will completely be replaced by JS once a movie is selected from the list -->
-			<div id = "movie_detail" class="card1 color-secondary g1 flex flex-column span-height">
+			<!-- Movie checkout-->
+			<div id = "movie_checkout" class="card1 color-secondary g1 flex flex-column span-height">
 
 				<div class="flex flex-column flex-align-center span-width padding2">
-					<h2 class="iconfont padding1">&#xe6a3;</h2>
-					<h2 class="nopadding">MOVIE DETAIL</h2>
+					<h2 class="iconfont padding1">&#xe682;</h2>
+					<h2 class="nopadding">CHECKOUT</h2>
 				</div>
 				<hr/>
 

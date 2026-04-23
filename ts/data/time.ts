@@ -19,3 +19,14 @@ export function parseTime(hh_mm : string, default_res = Eternity){
     let m = parseInt(t[1]);
     return h*60 + m;
 }
+
+export function toString(t : Time){
+    let h = (t / 60) % 24;
+    h = Math.round(h);
+    let m = t % 60;
+    
+    const hh = h < 10 ? `0${h}` : `${h}`;
+    const mm = m < 10 ? `0${m}` : `${m}`;
+
+    return `${hh}:${mm}`;
+}
