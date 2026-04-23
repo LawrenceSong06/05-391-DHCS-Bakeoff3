@@ -139,6 +139,50 @@ export function create_index_card(movie) {
     tags.append(create_paragraph("Description", movie.description));
     return res;
 }
+function submission_confirmation(userData, trial) {
+    let res = document.createElement("div");
+    res.style.position = "fixed";
+    res.style.left = '0';
+    res.style.right = '0';
+    res.style.width = "100%";
+    res.style.height = "100%";
+    res.style.background = "#000000a8";
+    res.className = "flex flex-row flex-align-center flex-justify-center nomargin";
+    let message = document.createElement("div");
+    message.style.padding = "1em";
+    message.className = "card1 noborder color-secondary flex flex-column ";
+    res.appendChild(message);
+    let h1 = document.createElement("h1");
+    h1.innerText = "Do you sure you want to buy:";
+    message.appendChild(h1);
+    message.appendChild(create_index_card(userData.movie));
+    let info = document.createElement("div");
+    message.appendChild(info);
+    let h2 = document.createElement("h2");
+    h2.innerText = "with the following choices?";
+    info.appendChild(create_paragraph("Name:", userData.userName));
+    info.appendChild(create_paragraph("Time:", `${userData.movieTime} -- ${Time.toString(Time.parseTime(userData.movieTime) + userData.movie.movieLength)}`));
+    info.appendChild(create_paragraph("Number of Tickets", userData.numberOfTickets));
+    message.appendChild(document.createElement("br"));
+    let confirm = document.createElement("button");
+    confirm.innerText = "Confirm";
+    confirm.style.fontSize = "1.25em";
+    confirm.className = "btn round";
+    confirm.addEventListener("click", () => {
+        trial.submitMovieChoice(userData);
+        res.remove();
+    });
+    message.appendChild(confirm);
+    let cancel = document.createElement("button");
+    cancel.addEventListener("click", () => {
+        res.remove();
+    });
+    cancel.innerText = "Cancel";
+    cancel.className = "btn color-primary noborder round color-reverse";
+    cancel.style.fontSize = "1.25em";
+    message.appendChild(cancel);
+    return res;
+}
 export function create_checkout(movie, trial) {
     // The container
     let res = document.createElement("div");
@@ -222,7 +266,7 @@ export function create_checkout(movie, trial) {
             numberOfTickets: parseInt(input_ticket.value), // a number
             userName: input_name.value // a string
         };
-        trial.submitMovieChoice(userData);
+        document.body.appendChild(submission_confirmation(userData, trial));
     });
     form.appendChild(buy);
     return res;
