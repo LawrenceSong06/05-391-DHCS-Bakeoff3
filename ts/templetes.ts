@@ -187,40 +187,40 @@ function submission_confirmation(userData, trial){
     let h1 = document.createElement("h1");
     h1.innerText = "Do you sure you want to buy:";
     message.appendChild(h1);
-
+    
     message.appendChild(create_index_card(userData.movie));
-
+    
     let info = document.createElement("div");
     message.appendChild(info);
     let h2 = document.createElement("h2");
     h2.innerText = "with the following choices?"
-
+    
     info.appendChild(create_paragraph("Name:", userData.userName));
     info.appendChild(create_paragraph("Time:", `${userData.movieTime} -- ${Time.toString(Time.parseTime(userData.movieTime) + userData.movie.movieLength)}`));
     info.appendChild(create_paragraph("Number of Tickets", userData.numberOfTickets));
-
+    
     message.appendChild(document.createElement("br"));
-
-    let confirm = document.createElement("button");
-    confirm.innerText = "Confirm";
-    confirm.style.fontSize = "1.25em";
-    confirm.className = "btn round";
-    confirm.addEventListener("click", ()=>{
-        trial.submitMovieChoice(userData);
-        res.remove();
-    });
-    message.appendChild(confirm);
-
+    
+    
     let cancel = document.createElement("button");
     cancel.addEventListener("click", ()=>{
         res.remove();
     });
     cancel.innerText = "Cancel";
-    cancel.className = "btn color-primary noborder round color-reverse";
+    cancel.className = "btn noborder round";
     cancel.style.fontSize = "1.25em";
     message.appendChild(cancel);
-
-
+    
+    let confirm = document.createElement("button");
+    confirm.innerText = "Confirm";
+    confirm.style.fontSize = "1.25em";
+    confirm.className = "btn round color-reverse color-primary";
+    confirm.addEventListener("click", ()=>{
+        trial.submitMovieChoice(userData);
+        res.remove();
+    });
+    message.appendChild(confirm);
+    
 
     return res;
 }
