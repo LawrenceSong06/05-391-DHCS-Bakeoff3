@@ -108,9 +108,12 @@ window.addEventListener("load", async (e: Event) => {
 			});
 
 			let radios = Array.from(s.getElementsByTagName("input"));
-			radios.forEach(r => {
-				r.checked = !r.checked;
-			});
+			for(let i = 0; i < radios.length; i++){
+				if(!radios[i].checked){
+					radios[i].checked = true;
+					break;
+				}
+			}
 		});
 	});
 	
@@ -184,11 +187,11 @@ window.addEventListener("load", async (e: Event) => {
 					return;
 				}
 				
-				const opt = data.get("actor-option");
+				let opt = data.get("actor-option");
 				if(opt == "include"){
 					included_actors.appendChild(Templete.create_selected_actor(a, opt));
 				}else{
-					included_actors.appendChild(Templete.create_selected_actor(a, opt));
+					excluded_actors.appendChild(Templete.create_selected_actor(a, opt));
 				}
 			});
 
